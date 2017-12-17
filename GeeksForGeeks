@@ -1,0 +1,423 @@
+import java.util.*;
+
+public class GeekForGeeks {
+/*given 2D matrix has only zeroes and ones and also the matrix is sorted row wise. Find the row with the minimum number of 1s */
+    public static int zeroOneMin(int[][] m) {
+        if (m == null || m.length == 0 || m[0].length == 0) return 0;
+        int count = 0;
+        int row = m.length;
+        int column = m[0].length;
+        int min = Integer.MAX_VALUE;
+        int index = 0;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (m[i][j] == 1) {
+                    count++;
+                    if (count < min) {
+                        min = count;
+                        index = i;
+                    }
+                }
+            }
+            count = 0;
+        }
+        return index;
+    }// time O(n*m) 
+    
+/*given 2D matrix has only zeroes and ones and also the matrix is sorted row wise. Find the row with the maximum number of 1s */
+    public static int zeroOneMax(int[][] m) {
+        if (m == null || m.length == 0 || m[0].length == 0)
+            return 0;
+        int count = 0;
+        int row = m.length;
+        int column = m[0].length;
+        int min = Integer.MIN_VALUE;
+        int index = 0;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (m[i][j] == 1) {
+                    count++;
+                    if (count > min) {
+                        min = count;
+                        index = i;
+                    }
+                }
+            }
+            count = 0;
+        }
+        return index;
+    }// time O(n*m)
+    
+/* Given a string - "str", find the repeated character present first in the string. Example : Input  :  geeksforgeeks   Output :  g (mind that it will be g, not e.)*/
+    public static void main(String [] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter a string");
+        HashMap<Character, Integer> map = new HashMap<>();
+        String s = sc.next();
+        if (s.length() <= 1) {
+            System.out.println("1");
+        } else {
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (map.containsKey(c)) {
+                    map.put(c, map.get(c) + 1);
+                } else {
+                    map.put(c, 1);
+                }
+            }
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (map.get(c) > 1) {
+                    System.out.println(c);
+                    break;
+                } else {
+                    System.out.println("-1");
+                    break;
+                }
+            }
+        }
+    }// time O(n) space O(n)
+    
+/*A number is said to be a magic number, if the sum of its digits are calculated till a single digit recursively by adding the sum of the digits after every addition. input: 1 output: true input: 67 output: false */
+    public static boolean magicNbr(int n) {
+        int sum = 0;
+        while (n != 0) {
+            sum += n % 10;
+            n /= 10;
+        }
+        if (sum >= 0 && sum <= 9) {
+            return true;
+        }
+        return false;
+    }
+    
+/*Given a string S. The task is to count the characters that have ‘N’ number of occurrences. If a character appears consecutively it is counted as 1 occurrence. abc 0 geeksforgeeks 2 */
+    public static int consCharCount(String s) {
+        if (s.length() <= 1) return 0;
+        int count = 0;
+        for (int i = 0; i < s.length() - 1; i++) {
+            char c = s.charAt(i);
+            char x = s.charAt(i + 1);
+            if (x == c) {
+                count++;
+            }
+        }
+        return count;
+    }// time O(n)
+    
+/*Two strings are given. Modify 1st string such that all the common characters of the 2nd strings have to be removed and the uncommon characters of the 2nd string have to be concatenated with uncommon characters of the 1st string.input: aacdb gafd output: cbgf */ 
+    public static String rmCommonChar(String a, String b) {
+        if (a.length() < 1 || a == null) return b;
+        if (b.length() < 1 || b == null) return a;
+        String results = "";
+        String ab = a + b;
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        for (int i = 0; i < ab.length(); i++) {
+            char c = ab.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        for (char c : map.keySet()) {
+            if (map.get(c) == 1)
+                results += c;
+        }
+        return results;
+    } // time O(n) space O(n)
+    
+/*Given a string consisting of only 0, 1, A, B, C where
+A = AND ;; &&
+B = OR ;; ||
+C = XOR ::
+Calculate the value of the string assuming no order of precedence and evaluation is done from left to right. Input : 1A0B1 Output : 1 AND 0 OR 1 = 1 */
+    public static int andOr(String n) {
+        int c = 0;
+        for (int i = 0; i < n.length(); i++) {
+            if (n.charAt(i) == 'A') {
+                int a = Integer.parseInt(String.valueOf(n.charAt(i - 1)));
+                int b = Integer.parseInt(String.valueOf(n.charAt(i + 1)));
+                c = a & b;
+            } else if (n.charAt(i) == 'B') {
+                int a = Integer.parseInt(String.valueOf(n.charAt(i - 1)));
+                int b = Integer.parseInt(String.valueOf(n.charAt(i + 1)));
+                c = a | b;
+            } else if (n.charAt(i) == 'C') {
+                int a = Integer.parseInt(String.valueOf(n.charAt(i - 1)));
+                int b = Integer.parseInt(String.valueOf(n.charAt(i + 1)));
+                c = a ^ b;
+            }
+        }
+        return c;
+    }// time O(n)
+
+/* Given two numbers. Add the numbers and find the count of carries in their addition.
+ Input: 345 234 Output: 0  input: 2345 535 output: 1 */
+    public static int countCarries(int n, int x) {
+        int count = 0;
+        while (x != 0 || n != 0) {
+            int digx = x % 10;
+            int dign = n % 10;
+            int sum = digx + dign;
+            if (sum >= 10)
+                count++;
+            x /= 10;
+            n /= 10;
+        }
+        return count;
+    }
+    
+/*Given an array of positive integers. The task is to print the maximum length of Bitonic subsequence. a subsequence of array is called Bitonic if it is first increasing, then decreasing. input: 1 11 2 10 4 5 2 1 output: 6 */
+    public static int bitonicSeq(int[] nums) {
+        if (nums.length < 1 || nums == null)
+            return 0;
+        int count = 1;
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (nums[i] > nums[i + 1]) {
+                count++;
+            }
+            if (nums[i + 1] < nums[i + 2]) {
+                count++;
+            }
+        }
+        return count;
+    }// time O(n)
+
+/* Rearrange a given array in-place such that all the negative numbers occurs before positive numbers. (Maintain the order of all -ve and +ve numbers as given in the original array). input: -3 3 -2 2 Output: -3 -2 3 2 */
+    public static int[] rearangPN(int[] nums) {
+        if (nums.length < 1 || nums == null) return nums;
+        int i = 0;
+        int j = nums.length - 1;
+        while (i < j) {
+            if (nums[i] > 0 && nums[j] < 0) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+
+                i++;
+                j--;
+            }
+            if (nums[i] < 0) {
+                i++;
+            }
+            if (nums[j] > 0) {
+                j--;
+            }
+        }
+        return nums;
+    }// time O(n)
+    
+/*Given an array of size N , print the total count of sub-arrays having their sum equal to 0. input: 6 -1 -3 4 -2 2 4 6 -12 -7 output: 4 explaniation [6,6,-12] [-3, 4, 6,-7] [-2, 2] [-1,-3, 4] */
+    public static int SumsToZero(int[] nums) {
+        int count = 0;
+        Arrays.sort(nums);
+        int sum = 0;
+        int i = 0;
+        int j = nums.length - 1;
+        while (i <= j) {
+            sum = nums[i] + nums[j];
+            if (sum < 0) {
+                sum += nums[j--];
+            }
+            if (sum > 0) {
+                sum += nums[i++];
+            }
+            count++;
+            j--;
+            i++;
+        }
+        return count;
+    }// time O(n log n) 
+    
+/*You are given an array A containing 2*N+2 positive numbers, out of which N numbers are repeated exactly once and the other two numbers occur exactly once and are distinct. You need to find the other two numbers and print them in ascending order.input: 1 2 3 2 1 4 output: 3 4 */
+    public static ArrayList<Integer> distinct(int[] nums) {
+        ArrayList<Integer> results = new ArrayList<>();
+        if (nums.length < 1 || nums == null) return results;
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+        for (int k : map.keySet()) {
+            if (map.get(k) == 1)
+                results.add(k);
+        }
+        return results;
+    }// time O(n) space O(n)
+    
+/*Given a word and a text, return the count of the occurrences of anagrams of the word in the text (For eg: anagrams of word for are for, ofr, rof etc.))
+input: forxxorfxdofr , for >> output:3 */
+    public static int anagramsNbr(String s, String n) {
+        int results = 0;
+        int count = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < n.length(); i++) {
+            map.put(n.charAt(i), i);
+        }
+        for (int j = 0; j < s.length(); j++) {
+            char c = s.charAt(j);
+            if (map.containsKey(c))
+                count++;
+        }
+        results = count / n.length();
+        return results;
+    }// time O(n*s) space O(n)
+    
+/* Given a DNA sequence e.g. XHFRRGGG.....
+input: XHFRRGGGX, dup length = 2 output: X,R
+Find all the duplicates with duplicate length n
+To solve this we need a hashMap to store the charcters and thier counts in the string
+loop through the map if the value for any of each char is == n, add the char to the list of charcters.Convert to Upper Case &&XxGhg  &&XXGHG &,X,G */
+    public static ArrayList<Character> lengthFinder (String str, int n){
+        ArrayList<Character> results = new ArrayList<Character>();
+        if (str.length() < 1 || str == null) return results;
+
+        HashMap<Character, Integer> map = new HashMap<Character,Integer>();
+
+        for( int i =0; i< str.length(); i++){ // &&&ix
+            char c = str.charAt(i);
+            if (c >= 'a' && c <= 'z')
+                c = Character.toUpperCase(c);
+            map.put(c, map.getOrDefault(c,0)+1);
+        }
+        for(char c: map.keySet()){
+            if(map.get(c) == n)
+                results.add(c);
+        }
+        return results;
+    }// time O(n) space O(n)
+    
+/* Given a sequence of numbers (or array).Find the maximum distance between all the same numbers. Like you have 1,2,3,4,1,1,7,4 so max(1)=5,max(2)=0 max(4)=4 */
+    public static int farFromEachOther(int[] nums, int n){
+        if ( nums.length < 1 || nums == null ) return -1;
+        int count = 0;
+        int p =0;
+        int c =0;
+        for( int i =0; i <nums.length; i++) {
+            if (nums[i] == n) {
+                p = i;
+                break;
+                //  i = p+1;
+            }
+        }
+        for( int i =p+1; i <nums.length; i++) {
+            if(nums[i] == n){
+                c = i;
+                count = Math.abs(c-p);
+            }else{
+                c = 0;
+            }
+        }
+        return count;
+    }//time O(n)
+    
+/* Given an N length array and you have to tell whether the array is perfect or not.An array is said to be perfect if it's reverse array matches the original array. If the array is perfect then print "PERFECT" else print "NOT PERFECT". 12321 is prefect */
+    public static boolean isPerfect(int [] nums){
+        if(nums.length < 1 || nums == null) return false;
+        int i = 0;
+        int j = nums.length-1;
+        while(i <= j){
+            if(nums[i]== nums[j]){
+                i++;
+                j--;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }//time O(n)
+    
+/* Given an array where every element appears twice except a pair (two elements). Find the elements of this unique pair. input: 2 2 5 5 6 7  output: 6, 7
+    public static int [] uniquePair(int [] nums){
+        int [] results = new int[2];
+        if(nums == null || nums.length < 1) return results;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i =0;i<nums.length; i++) {
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+            for(int k: map.keySet()) {
+                if (map.get(k) == 1) {
+                    results[0] = k;
+                    break;
+                }
+            }
+        for(int k: map.keySet()) {
+            if (map.get(k) == 1) {
+                results[1] = k;
+            }
+        }
+        return results;
+    } //time O(n) space O(n)
+    
+/* Given an integer N, you have to print the sum of odd numbers and even numbers form 1 to N*/
+    public static int [] sumOddEven(int n){
+        int [] results = new int [2];
+        int evn = 0;
+        int odd = 0;
+        if (n <= 0) return results;
+        for(int i =1; i<= n; i++){
+            if(i%2 == 0){
+                evn += i;
+            }else{
+                odd += i;
+            }
+        }
+        results[0]=evn;
+        results[1]=odd;
+        return results;
+    }
+    
+/* Given a string, remove the vowels from the string and print the string without vowels.
+input: welcome to geeksforgeeks output: wlcm t gksfrgks */
+    public static String removeV(String s){
+        String results = "";
+        if(s == null || s.length()== 0) return results;
+        for(int i=0; i<s.length(); i++) {
+            if (s.charAt(i) == 'a' || s.charAt(i) == 'e' || s.charAt(i) == 'i' || s.charAt(i) == 'o' || s.charAt(i) == 'u') {
+                continue;
+            }else{
+                results += s.charAt(i);
+            }
+        }
+        return results;
+    }//time: O(n) space O(n)
+    
+/* Given an integer N. The task is to count the number of integers from 1 to N contains 0’s as a digit. input 21 output: 2 */
+    public static int countZ(int n){
+        int results = 0;
+        int count = 0;
+        while(n >= 0){
+           if(n%10 == 0)
+               count++;
+            n--;
+        }
+        results = count;
+        return results;
+    }
+    
+/* selection sort */
+    public static void SelectionSort (int[] num) {
+        int i, j, first, temp;
+        for (i = num.length - 1; i > 0; i--) {
+            first = 0;  //initialize to subscript of first element
+            for (j = 1; j <= i; j++) {  //locate smallest element between 1 and i
+                if (num[j] > num[first])
+                    first = j;
+            }
+            temp = num[first];   //swap smallest found with element in position i
+            num[first] = num[i];
+            num[i] = temp;
+        }
+    }
+ /* insertion sort */
+    public static void InsertionSort(int[] num) {
+        int j, key, i;
+        for(j = 1; j < num.length; j++) {    // start with 1 (not 0)
+            key = num[j];
+            for(i=j - 1; (i >= 0)&&(num[i] > key);i--){  // Smaller values are moving up
+                num[i+1] = num[i];
+            }
+            num[i+1] = key; // Put the key in its proper location
+        }
+    }
+
+  
+    }
